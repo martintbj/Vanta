@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FORM Athletics — Move With Purpose</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Space+Grotesk:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--bg:#060606;--s1:#0c0c0c;--s2:#141414;--text:#f0f0eb;--mid:#7a7a75;--dim:#3a3a38;--neon:#c8ff2e;--nd:rgba(200,255,46,0.06);--font-d:'Syne',sans-serif;--font-b:'Space Grotesk',system-ui,sans-serif}
+html{scroll-behavior:smooth}body{background:var(--bg);color:var(--text);font-family:var(--font-b);font-weight:300;font-size:14px;line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+::selection{background:rgba(200,255,46,0.2);color:#fff}
+::-webkit-scrollbar{width:4px}::-webkit-scrollbar-track{background:var(--bg)}::-webkit-scrollbar-thumb{background:rgba(200,255,46,0.15);border-radius:2px}
+
+/* ═══ NAV ═══ */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:0 clamp(20px,4vw,48px);height:60px;background:rgba(6,6,6,0.85);backdrop-filter:blur(20px);border-bottom:1px solid rgba(255,255,255,0.04);transition:transform .4s}
+nav.hide{transform:translateY(-100%)}
+.logo{font-family:var(--font-d);font-size:20px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:var(--text);text-decoration:none}.logo em{color:var(--neon);font-style:normal}
+.nav-links{display:flex;gap:28px;list-style:none}
+.nav-links a{color:var(--mid);text-decoration:none;font-size:11px;letter-spacing:.08em;text-transform:uppercase;transition:color .3s;position:relative}
+.nav-links a::after{content:'';position:absolute;bottom:-4px;left:0;width:0;height:1px;background:var(--neon);transition:width .3s}
+.nav-links a:hover{color:var(--text)}.nav-links a:hover::after{width:100%}
+.join-btn{padding:9px 22px;background:var(--neon);color:var(--bg);font-size:11px;letter-spacing:.1em;text-transform:uppercase;font-weight:600;border:none;cursor:pointer;font-family:var(--font-b);transition:all .3s;text-decoration:none}
+.join-btn:hover{box-shadow:0 0 28px rgba(200,255,46,0.25)}
+
+/* ═══ HERO — Split screen with animated text ═══ */
+.hero{min-height:100vh;display:grid;grid-template-columns:1fr 1fr;position:relative;overflow:hidden}
+.hero-left{display:flex;flex-direction:column;justify-content:center;padding:0 clamp(24px,5vw,80px);position:relative;z-index:2}
+.hero-tag{font-size:10px;letter-spacing:.35em;text-transform:uppercase;color:var(--neon);margin-bottom:24px;display:inline-flex;align-items:center;gap:10px}
+.hero-tag::before{content:'';width:20px;height:1px;background:var(--neon)}
+.hero h1{font-family:var(--font-d);font-size:clamp(48px,7vw,96px);font-weight:800;line-height:.88;text-transform:uppercase;margin-bottom:20px;letter-spacing:-.02em}
+.hero h1 em{color:var(--neon);font-style:normal;display:block}
+.hero-desc{color:var(--mid);font-size:16px;line-height:1.7;max-width:420px;margin-bottom:36px}
+.hero-actions{display:flex;gap:12px;flex-wrap:wrap}
+.hero-ghost{display:inline-block;padding:13px 32px;border:1px solid rgba(255,255,255,0.1);color:var(--mid);font-size:11px;letter-spacing:.1em;text-transform:uppercase;text-decoration:none;transition:all .3s}
+.hero-ghost:hover{border-color:var(--neon);color:var(--neon)}
+
+.hero-right{position:relative;overflow:hidden}
+.hero-img{width:100%;height:100%;object-fit:cover;filter:brightness(0.7) contrast(1.1)}
+/* Diagonal slice overlay */
+.hero-right::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,var(--bg) 0%,var(--bg) 8%,transparent 8.5%);z-index:2}
+.hero-right::after{content:'';position:absolute;bottom:0;left:0;right:0;height:30%;background:linear-gradient(transparent,var(--bg));z-index:2}
+
+/* Animated counter strip */
+.hero-stats{display:flex;gap:40px;margin-top:48px}
+.hero-stat{position:relative}
+.hero-stat-num{font-family:var(--font-d);font-size:clamp(32px,3vw,48px);font-weight:800;color:var(--neon);line-height:1}
+.hero-stat-label{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--dim);margin-top:4px}
+
+/* ═══ MARQUEE ═══ */
+.marquee{border-top:1px solid rgba(255,255,255,0.04);border-bottom:1px solid rgba(255,255,255,0.04);padding:14px 0;overflow:hidden;white-space:nowrap}
+.marquee-inner{display:inline-flex;animation:scroll 30s linear infinite}
+@keyframes scroll{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+.marquee-item{font-family:var(--font-d);font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.15em;color:var(--dim);padding:0 40px}
+.marquee-dot{color:var(--neon);padding:0 8px}
+
+/* ═══ CLASSES — Horizontal scroll cards ═══ */
+.classes{padding:100px clamp(20px,4vw,48px)}
+.sec-head{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:48px;flex-wrap:wrap;gap:16px}
+.sec-tag{font-size:10px;letter-spacing:.3em;text-transform:uppercase;color:var(--neon);margin-bottom:8px}
+.sec-title{font-family:var(--font-d);font-size:clamp(32px,4vw,52px);font-weight:800;text-transform:uppercase;line-height:.95}
+.sec-title em{color:var(--neon);font-style:normal}
+.sec-link{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--mid);text-decoration:none;border-bottom:1px solid var(--dim);padding-bottom:2px;transition:all .3s}
+.sec-link:hover{color:var(--neon);border-color:var(--neon)}
+
+.class-scroll{display:flex;gap:2px;overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:12px;-webkit-overflow-scrolling:touch}
+.class-scroll::-webkit-scrollbar{height:2px}.class-scroll::-webkit-scrollbar-thumb{background:rgba(200,255,46,0.15)}
+.class-card{flex:0 0 320px;height:440px;position:relative;overflow:hidden;scroll-snap-align:start;cursor:pointer;border:1px solid rgba(255,255,255,0.04);transition:border-color .4s}
+.class-card:hover{border-color:rgba(200,255,46,0.15)}
+.class-card img{width:100%;height:100%;object-fit:cover;transition:transform .6s cubic-bezier(.16,1,.3,1);filter:brightness(0.6) contrast(1.1)}
+.class-card:hover img{transform:scale(1.06)}
+.class-info{position:absolute;bottom:0;left:0;right:0;padding:28px;background:linear-gradient(transparent,rgba(6,6,6,0.95));z-index:2}
+.class-num{font-family:var(--font-d);font-size:64px;font-weight:800;color:rgba(200,255,46,0.08);line-height:1;margin-bottom:8px}
+.class-name{font-family:var(--font-d);font-size:22px;font-weight:700;text-transform:uppercase;margin-bottom:4px}
+.class-meta{font-size:11px;color:var(--mid);letter-spacing:.06em}
+.class-book{display:inline-block;margin-top:14px;padding:8px 20px;border:1px solid rgba(200,255,46,0.2);color:var(--neon);font-size:10px;letter-spacing:.1em;text-transform:uppercase;background:transparent;cursor:pointer;font-family:var(--font-b);transition:all .3s;opacity:0;transform:translateY(8px);transition:all .4s}
+.class-card:hover .class-book{opacity:1;transform:translateY(0)}
+.class-book:hover{background:var(--neon);color:var(--bg)}
+
+/* ═══ SPLIT FEATURE ═══ */
+.split{display:grid;grid-template-columns:1fr 1fr;min-height:80vh}
+.split-img{position:relative;overflow:hidden}
+.split-img img{width:100%;height:100%;object-fit:cover;filter:brightness(0.65) contrast(1.1)}
+.split-content{display:flex;flex-direction:column;justify-content:center;padding:clamp(32px,5vw,80px);background:var(--s1)}
+.split-content .sec-tag{margin-bottom:12px}
+.split-content h2{font-family:var(--font-d);font-size:clamp(28px,3.5vw,48px);font-weight:800;text-transform:uppercase;line-height:.95;margin-bottom:16px}
+.split-content h2 em{color:var(--neon);font-style:normal}
+.split-content p{color:var(--mid);font-size:15px;line-height:1.7;margin-bottom:24px;max-width:440px}
+.feat-list{display:flex;flex-direction:column;gap:8px;margin-bottom:28px}
+.feat-item{display:flex;align-items:center;gap:12px;font-size:13px;color:var(--mid)}
+.feat-dot{width:6px;height:6px;background:var(--neon);border-radius:50%;flex-shrink:0}
+.split.reverse{direction:rtl}.split.reverse>*{direction:ltr}
+
+/* ═══ SCHEDULE — Clean table ═══ */
+.schedule{padding:100px clamp(20px,4vw,48px);background:var(--s1)}
+.sched-grid{max-width:900px;margin:0 auto}
+.sched-day{margin-bottom:28px}
+.sched-day h3{font-family:var(--font-d);font-size:12px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--neon);margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid rgba(200,255,46,0.08)}
+.sr{display:flex;align-items:center;padding:14px 0;border-bottom:1px solid rgba(255,255,255,0.03);transition:background .2s}
+.sr:hover{background:rgba(200,255,46,0.015)}
+.st{font-size:13px;color:var(--mid);width:90px;flex-shrink:0}
+.sc{font-family:var(--font-d);font-size:14px;font-weight:600;text-transform:uppercase;flex:1}
+.sn{font-size:12px;color:var(--mid);flex:1}
+.ss{font-size:11px;color:var(--dim);width:70px;text-align:right}
+.sb{padding:7px 18px;border:1px solid rgba(200,255,46,0.15);color:var(--neon);font-size:10px;letter-spacing:.1em;text-transform:uppercase;background:transparent;cursor:pointer;font-family:var(--font-b);margin-left:16px;transition:all .3s}
+.sb:hover{background:var(--neon);color:var(--bg)}
+
+/* ═══ PRICING — Glassy cards ═══ */
+.pricing{padding:100px clamp(20px,4vw,48px);text-align:center;position:relative;overflow:hidden}
+.pricing::before{content:'FORM';position:absolute;font-family:var(--font-d);font-size:clamp(150px,30vw,500px);font-weight:800;color:rgba(200,255,46,0.02);top:50%;left:50%;transform:translate(-50%,-50%);white-space:nowrap;pointer-events:none}
+.tiers{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;max-width:960px;margin:48px auto 0;position:relative;z-index:2}
+.tier{padding:40px 28px;background:var(--s1);border:1px solid rgba(255,255,255,0.03);text-align:center;transition:all .4s}
+.tier:hover{border-color:rgba(200,255,46,0.12);background:var(--s2)}
+.tier.feat{border-color:rgba(200,255,46,0.2);background:var(--nd)}
+.tier-name{font-family:var(--font-d);font-size:11px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--mid);margin-bottom:12px}
+.tier.feat .tier-name{color:var(--neon)}
+.tier-price{font-family:var(--font-d);font-size:42px;font-weight:800;margin-bottom:4px}
+.tier-period{font-size:12px;color:var(--dim);margin-bottom:24px}
+.tier-feat{font-size:12px;color:var(--mid);padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.03)}
+
+/* ═══ FOOTER ═══ */
+footer{border-top:1px solid rgba(255,255,255,0.04);padding:60px clamp(20px,4vw,48px) 28px}
+.foot-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:48px;margin-bottom:40px}
+.foot-brand{font-family:var(--font-d);font-size:22px;font-weight:800;text-transform:uppercase;margin-bottom:12px}
+.foot-brand em{color:var(--neon);font-style:normal}
+footer p{font-size:13px;color:var(--dim);line-height:1.7}
+footer h4{font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:var(--mid);margin-bottom:16px}
+footer a{display:block;color:var(--dim);text-decoration:none;font-size:13px;padding:4px 0;transition:color .3s}
+footer a:hover{color:var(--neon)}
+.foot-bottom{border-top:1px solid rgba(255,255,255,0.04);padding-top:20px;display:flex;justify-content:space-between;font-size:11px;color:var(--dim)}
+
+/* Toast */
+.toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--s2);border:1px solid rgba(200,255,46,0.15);color:var(--text);padding:14px 32px;font-size:13px;opacity:0;transition:all .4s;z-index:1000;backdrop-filter:blur(8px)}
+.toast.show{opacity:1;transform:translateX(-50%)}
+
+/* ═══ RESPONSIVE ═══ */
+@media(max-width:900px){
+  .hero{grid-template-columns:1fr}.hero-right{height:50vh}.hero-right::before{display:none}
+  .nav-links{display:none}
+  .split,.split.reverse{grid-template-columns:1fr;direction:ltr}
+  .split-img{height:50vh}
+  .tiers{grid-template-columns:1fr}
+  .foot-grid{grid-template-columns:1fr 1fr}
+  .class-card{flex:0 0 280px;height:380px}
+  .hero-stats{gap:24px}
+  .sr{flex-wrap:wrap;gap:8px}
+}
+@media(max-width:600px){.foot-grid{grid-template-columns:1fr}.hero-stats{flex-direction:column;gap:16px}}
+
+/* ═══ SCROLL ANIMATIONS ═══ */
+.reveal{opacity:0;transform:translateY(30px);transition:opacity .7s cubic-bezier(.16,1,.3,1),transform .7s cubic-bezier(.16,1,.3,1)}
+.reveal.vis{opacity:1;transform:translateY(0)}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="nav">
+  <a href="#" class="logo">FORM<em>.</em></a>
+  <ul class="nav-links">
+    <li><a href="#classes">Classes</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#schedule">Schedule</a></li>
+    <li><a href="#pricing">Pricing</a></li>
+  </ul>
+  <a href="#pricing" class="join-btn">Join Now</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-left">
+    <div class="hero-tag">Boutique Fitness Studio</div>
+    <h1>Move<br>with<br><em>purpose.</em></h1>
+    <p class="hero-desc">Strength. Mobility. Community. Intentional movement meets high-performance coaching in a space built to push your limits.</p>
+    <div class="hero-actions">
+      <a href="#pricing" class="join-btn" style="text-decoration:none">Start Free Trial</a>
+      <a href="#classes" class="hero-ghost">Explore Classes</a>
+    </div>
+    <div class="hero-stats">
+      <div class="hero-stat"><div class="hero-stat-num" id="stat1">0</div><div class="hero-stat-label">Members</div></div>
+      <div class="hero-stat"><div class="hero-stat-num" id="stat2">0</div><div class="hero-stat-label">Classes/Week</div></div>
+      <div class="hero-stat"><div class="hero-stat-num" id="stat3">0%</div><div class="hero-stat-label">Retention</div></div>
+    </div>
+  </div>
+  <div class="hero-right">
+    <img class="hero-img" src="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=1200&h=1400&fit=crop&q=80" alt="Gym interior">
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee"><div class="marquee-inner" id="marquee"></div></div>
+
+<!-- CLASSES -->
+<section id="classes" class="classes">
+  <div class="sec-head reveal">
+    <div><div class="sec-tag">What we offer</div><div class="sec-title">Our <em>classes.</em></div></div>
+    <a href="#schedule" class="sec-link">View full schedule</a>
+  </div>
+  <div class="class-scroll">
+    <div class="class-card" onclick="toast('Booked: FORM Burn')">
+      <img src="https://images.unsplash.com/photo-1517836357463-d25dfeac3438?w=640&h=880&fit=crop&q=80" alt="HIIT">
+      <div class="class-info"><div class="class-num">01</div><div class="class-name">FORM Burn</div><div class="class-meta">HIIT &middot; 45 min &middot; All levels</div><button class="class-book">Book Class</button></div>
+    </div>
+    <div class="class-card" onclick="toast('Booked: FORM Lift')">
+      <img src="https://images.unsplash.com/photo-1581009146145-b5ef050c2e1e?w=640&h=880&fit=crop&q=80" alt="Strength">
+      <div class="class-info"><div class="class-num">02</div><div class="class-name">FORM Lift</div><div class="class-meta">Strength &middot; 60 min &middot; Intermediate+</div><button class="class-book">Book Class</button></div>
+    </div>
+    <div class="class-card" onclick="toast('Booked: FORM Flow')">
+      <img src="https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=640&h=880&fit=crop&q=80" alt="Yoga">
+      <div class="class-info"><div class="class-num">03</div><div class="class-name">FORM Flow</div><div class="class-meta">Yoga &middot; 50 min &middot; All levels</div><button class="class-book">Book Class</button></div>
+    </div>
+    <div class="class-card" onclick="toast('Booked: FORM Box')">
+      <img src="https://images.unsplash.com/photo-1549719386-74dfcbf7dbed?w=640&h=880&fit=crop&q=80" alt="Boxing">
+      <div class="class-info"><div class="class-num">04</div><div class="class-name">FORM Box</div><div class="class-meta">Boxing &middot; 45 min &middot; All levels</div><button class="class-book">Book Class</button></div>
+    </div>
+    <div class="class-card" onclick="toast('Booked: FORM Ride')">
+      <img src="https://images.unsplash.com/photo-1534258936925-c58bed479fcb?w=640&h=880&fit=crop&q=80" alt="Cycling">
+      <div class="class-info"><div class="class-num">05</div><div class="class-name">FORM Ride</div><div class="class-meta">Cycling &middot; 40 min &middot; All levels</div><button class="class-book">Book Class</button></div>
+    </div>
+    <div class="class-card" onclick="toast('Booked: FORM Stretch')">
+      <img src="https://images.unsplash.com/photo-1518611012118-696072aa579a?w=640&h=880&fit=crop&q=80" alt="Stretch">
+      <div class="class-info"><div class="class-num">06</div><div class="class-name">FORM Stretch</div><div class="class-meta">Recovery &middot; 30 min &middot; All levels</div><button class="class-book">Book Class</button></div>
+    </div>
+  </div>
+</section>
+
+<!-- SPLIT: ABOUT -->
+<section id="about" class="split reveal">
+  <div class="split-img"><img src="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=900&h=1100&fit=crop&q=80" alt="Training"></div>
+  <div class="split-content">
+    <div class="sec-tag">Our philosophy</div>
+    <h2>We don't do <em>shortcuts.</em></h2>
+    <p>Every rep counts. Every class is programmed with purpose. Progressive overload, intelligent recovery, and showing up for yourself — especially on the hard days.</p>
+    <div class="feat-list">
+      <div class="feat-item"><div class="feat-dot"></div>24 NSCA & NASM certified trainers</div>
+      <div class="feat-item"><div class="feat-dot"></div>Max 12 per class — real coaching</div>
+      <div class="feat-item"><div class="feat-dot"></div>InBody scans & progress tracking</div>
+      <div class="feat-item"><div class="feat-dot"></div>Recovery lounge with cold plunge & sauna</div>
+    </div>
+    <a href="#pricing" class="join-btn" style="align-self:flex-start;text-decoration:none">Start Free Trial</a>
+  </div>
+</section>
+
+<!-- SPLIT: RECOVERY (reversed) -->
+<section class="split reverse reveal">
+  <div class="split-img"><img src="https://images.unsplash.com/photo-1540497077202-7c8a3999166f?w=900&h=1100&fit=crop&q=80" alt="Recovery"></div>
+  <div class="split-content">
+    <div class="sec-tag">Recovery lounge</div>
+    <h2>Earn your <em>rest.</em></h2>
+    <p>Cold plunge at 38°F, infrared sauna, and Normatec compression therapy. Recovery isn't optional — it's how you come back stronger. Elite members get unlimited access.</p>
+    <div class="feat-list">
+      <div class="feat-item"><div class="feat-dot"></div>Cold plunge — 38°F</div>
+      <div class="feat-item"><div class="feat-dot"></div>Full-spectrum infrared sauna</div>
+      <div class="feat-item"><div class="feat-dot"></div>Normatec compression boots</div>
+    </div>
+    <button class="join-btn" onclick="toast('Free intro session request sent!')">Book Free Intro</button>
+  </div>
+</section>
+
+<!-- SCHEDULE -->
+<section id="schedule" class="schedule">
+  <div class="sec-head reveal" style="justify-content:center;text-align:center;flex-direction:column;align-items:center">
+    <div class="sec-tag">This week</div>
+    <div class="sec-title">Class <em>Schedule</em></div>
+  </div>
+  <div class="sched-grid reveal">
+    <div class="sched-day"><h3>Monday</h3>
+      <div class="sr"><span class="st">6:00 AM</span><span class="sc">FORM Burn</span><span class="sn">Alex R.</span><span class="ss">4 spots</span><button class="sb" onclick="toast('Booked: Mon 6AM')">Book</button></div>
+      <div class="sr"><span class="st">12:00 PM</span><span class="sc">FORM Lift</span><span class="sn">Marcus W.</span><span class="ss">8 spots</span><button class="sb" onclick="toast('Booked: Mon 12PM')">Book</button></div>
+      <div class="sr"><span class="st">5:30 PM</span><span class="sc">FORM Burn</span><span class="sn">Maya C.</span><span class="ss">2 spots</span><button class="sb" onclick="toast('Booked: Mon 5:30PM')">Book</button></div>
+      <div class="sr"><span class="st">7:00 PM</span><span class="sc">FORM Flow</span><span class="sn">Jordan L.</span><span class="ss">12 spots</span><button class="sb" onclick="toast('Booked: Mon 7PM')">Book</button></div>
+    </div>
+    <div class="sched-day"><h3>Tuesday</h3>
+      <div class="sr"><span class="st">6:00 AM</span><span class="sc">FORM Lift</span><span class="sn">Marcus W.</span><span class="ss">6 spots</span><button class="sb" onclick="toast('Booked: Tue 6AM')">Book</button></div>
+      <div class="sr"><span class="st">12:00 PM</span><span class="sc">FORM Flow</span><span class="sn">Jordan L.</span><span class="ss">10 spots</span><button class="sb" onclick="toast('Booked: Tue 12PM')">Book</button></div>
+      <div class="sr"><span class="st">6:00 PM</span><span class="sc">FORM Box</span><span class="sn">Alex R.</span><span class="ss">3 spots</span><button class="sb" onclick="toast('Booked: Tue 6PM')">Book</button></div>
+    </div>
+    <div class="sched-day"><h3>Wednesday</h3>
+      <div class="sr"><span class="st">6:00 AM</span><span class="sc">FORM Ride</span><span class="sn">Maya C.</span><span class="ss">5 spots</span><button class="sb" onclick="toast('Booked: Wed 6AM')">Book</button></div>
+      <div class="sr"><span class="st">5:30 PM</span><span class="sc">FORM Lift</span><span class="sn">Marcus W.</span><span class="ss">7 spots</span><button class="sb" onclick="toast('Booked: Wed 5:30PM')">Book</button></div>
+      <div class="sr"><span class="st">7:30 PM</span><span class="sc">FORM Stretch</span><span class="sn">Jordan L.</span><span class="ss">15 spots</span><button class="sb" onclick="toast('Booked: Wed 7:30PM')">Book</button></div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section id="pricing" class="pricing">
+  <div class="reveal" style="position:relative;z-index:2">
+    <div class="sec-tag" style="text-align:center;display:block;margin-bottom:8px">Membership</div>
+    <div class="sec-title" style="text-align:center">Start your <em>form.</em></div>
+    <p style="color:var(--mid);text-align:center;margin-top:12px;max-width:440px;margin-left:auto;margin-right:auto">No contracts. Cancel anytime. First class always free.</p>
+  </div>
+  <div class="tiers">
+    <div class="tier">
+      <div class="tier-name">Drop-In</div><div class="tier-price">$30</div><div class="tier-period">per class</div>
+      <div class="tier-feat">Access all 6 formats</div><div class="tier-feat">No commitment</div><div class="tier-feat">Towel & water included</div>
+      <button class="join-btn" style="background:transparent;border:1px solid rgba(200,255,46,0.15);color:var(--neon);width:100%;margin-top:24px" onclick="toast('Signup coming soon!')">Get Started</button>
+    </div>
+    <div class="tier feat">
+      <div class="tier-name">Unlimited</div><div class="tier-price">$149</div><div class="tier-period">per month</div>
+      <div class="tier-feat">Unlimited classes</div><div class="tier-feat">Priority booking</div><div class="tier-feat">1 guest pass/month</div><div class="tier-feat">InBody scan quarterly</div>
+      <button class="join-btn" style="width:100%;margin-top:24px" onclick="toast('Signup coming soon!')">Join Unlimited</button>
+    </div>
+    <div class="tier">
+      <div class="tier-name">Elite</div><div class="tier-price">$249</div><div class="tier-period">per month</div>
+      <div class="tier-feat">Everything in Unlimited</div><div class="tier-feat">2 PT sessions/month</div><div class="tier-feat">Nutrition coaching</div><div class="tier-feat">Recovery lounge access</div>
+      <button class="join-btn" style="background:transparent;border:1px solid rgba(200,255,46,0.15);color:var(--neon);width:100%;margin-top:24px" onclick="toast('Signup coming soon!')">Go Elite</button>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="foot-grid">
+    <div><div class="foot-brand">FORM<em>.</em></div><p>Boutique fitness studio. Intentional movement meets high-performance coaching.</p></div>
+    <div><h4>Classes</h4><a href="#classes">FORM Burn</a><a href="#classes">FORM Lift</a><a href="#classes">FORM Flow</a><a href="#classes">FORM Box</a><a href="#schedule">Full Schedule</a></div>
+    <div><h4>Studio</h4><a href="#">789 Iron St, Los Angeles</a><a href="#">Mon-Sat 5:30am-9pm</a><a href="#">(310) 555-0247</a><a href="#">info@formathletics.com</a></div>
+    <div><h4>Connect</h4><a href="social-fitness.html?tab=ig">Instagram</a><a href="social-fitness.html?tab=tt">TikTok</a><a href="#">YouTube</a><a href="#">App Store</a></div>
+  </div>
+  <div class="foot-bottom"><span>&copy; 2026 FORM Athletics</span><span>Crafted by Vanta Socials</span></div>
+</footer>
+
+<div class="toast" id="toastEl"></div>
+
+<script>
+function toast(m){var t=document.getElementById('toastEl');t.textContent=m;t.classList.add('show');clearTimeout(t._t);t._t=setTimeout(function(){t.classList.remove('show')},2500)}
+
+// Animated counters
+function animateCount(el,target,suffix,dur){
+  var start=performance.now();
+  function tick(now){
+    var p=Math.min(1,(now-start)/dur);
+    var ease=1-Math.pow(1-p,4);
+    el.textContent=Math.round(target*ease).toLocaleString()+(suffix||'');
+    if(p<1)requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+}
+setTimeout(function(){
+  animateCount(document.getElementById('stat1'),12000,'+',2000);
+  animateCount(document.getElementById('stat2'),42,'',1800);
+  animateCount(document.getElementById('stat3'),98,'%',2200);
+},500);
+
+// Marquee content
+var items=['FORM Burn','FORM Lift','FORM Flow','FORM Box','FORM Ride','FORM Stretch','No Contracts','First Class Free','12K+ Members','24 Trainers'];
+var html='';for(var i=0;i<3;i++){items.forEach(function(t){html+='<span class="marquee-item">'+t+'</span><span class="marquee-dot">&middot;</span>'})}
+document.getElementById('marquee').innerHTML=html;
+
+// Nav hide on scroll
+var lastY=0;var nav=document.getElementById('nav');
+window.addEventListener('scroll',function(){
+  var y=window.scrollY;
+  nav.classList.toggle('hide',y>lastY&&y>200);
+  lastY=y;
+},{passive:true});
+
+// Scroll reveal
+var reveals=document.querySelectorAll('.reveal');
+var ro=new IntersectionObserver(function(entries){entries.forEach(function(e){if(e.isIntersecting){e.target.classList.add('vis');ro.unobserve(e.target)}})},{threshold:0.1});
+reveals.forEach(function(el){ro.observe(el)});
+
+// Smooth scroll
+document.querySelectorAll('a[href^="#"]').forEach(function(a){
+  a.addEventListener('click',function(e){
+    var t=document.querySelector(this.getAttribute('href'));
+    if(t){e.preventDefault();t.scrollIntoView({behavior:'smooth'})}
+  });
+});
+</script>
+</body>
+</html>
