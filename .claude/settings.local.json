@@ -36,7 +36,9 @@
       "WebFetch(domain:videos.pexels.com)",
       "WebFetch(domain:www.tiktok.com)",
       "WebFetch(domain:www.instagram.com)",
-      "Bash(npm run *)"
+      "Bash(npm run *)",
+      "Bash(git fetch *)",
+      "Bash(git pull *)"
     ]
   }
 }
